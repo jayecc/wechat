@@ -16,10 +16,20 @@ go get -u -v github.com/jayecc/wechat
   - [getPaidUnionId](#getPaidUnionId) 
 - [接口调用凭证](#接口调用凭证)
   - [getAccessToken](#getAccessToken)
-  
+- [数据分析](#数据分析)
+  - [访问留存](#访问留存)
+    - [getDailyRetain](#getDailyRetain)
+    - [getMonthlyRetain](#getMonthlyRetain)
+    - [getWeeklyRetain](#getWeeklyRetain)
+  - [getDailySummary](#getDailySummary)
+  - [访问趋势](#访问趋势)
+    - [getDailyVisitTrend](#getDailyVisitTrend)
+    - [getMonthlyVisitTrend](#getMonthlyVisitTrend)
+    - [getWeeklyVisitTrend](#getWeeklyVisitTrend)
+
 ---
 
-### 登陆
+## 登陆
 
 #### [code2Session](https://developers.weixin.qq.com/miniprogram/dev/api-backend/open-api/login/auth.code2Session.html)
 
@@ -43,7 +53,7 @@ if err := Code2Session(req, resp); err != nil {
 
 ---
 
-### 用户信息
+## 用户信息
 
 #### [getPaidUnionId](https://developers.weixin.qq.com/miniprogram/dev/api-backend/open-api/user-info/auth.getPaidUnionId.html)
 > 调用时两种方式任选其一
@@ -67,7 +77,6 @@ if err := GetPaidUnionId(req, resp); err != nil {
 }
 
 ```
- 
 
  ---
  
@@ -83,8 +92,8 @@ req := new(GetAccessTokenRequest)
 resp := new(GetAccessTokenResponse)
 
 req = &GetAccessTokenRequest{
-    AppID:  "wxaec93043ddef499d",
-    Secret: "a810dda42806e814fbcf1237ee824bba",
+    AppID:  "xxx",
+    Secret: "xxx",
 }
 
 if err := GetAccessToken(req, resp); err != nil {
@@ -92,5 +101,66 @@ if err := GetAccessToken(req, resp); err != nil {
 }
  ```
   
+
+---
+ 
+## 数据分析
+
+### 访问留存
+ 
+#### [getDailyRetain](https://developers.weixin.qq.com/miniprogram/dev/api-backend/open-api/data-analysis/visit-retain/analysis.getDailyRetain.html)
+ 
+```go
+import "github.com/jayecc/wechat"
+ 
+req := new(GetDailyRetainRequest)
+resp := new(GetDailyRetainResponse)
+
+req = &GetDailyRetainRequest{
+    AppID:  "xxx",
+    Secret: "xxx",
+}
+
+if err := GetDailyRetain(req, resp); err != nil {
+    t.Fatalf("%v", err)
+}
+```
+ 
+#### [getMonthlyRetain](https://developers.weixin.qq.com/miniprogram/dev/api-backend/open-api/data-analysis/visit-retain/analysis.getMonthlyRetain.html)
+ 
+```go
+import "github.com/jayecc/wechat"
+ 
+req := new(GetMonthlyRetainRequest)
+resp := new(GetMonthlyRetainResponse)
+
+req = &GetMonthlyRetainRequest{
+    AppID:  "xxx",
+    Secret: "xxx",
+}
+
+if err := GetMonthlyRetain(req, resp); err != nil {
+    t.Fatalf("%v", err)
+}
+```
+
+#### [getWeeklyRetain](https://developers.weixin.qq.com/miniprogram/dev/api-backend/open-api/data-analysis/visit-retain/analysis.getWeeklyRetain.html)
+ 
+```go
+import "github.com/jayecc/wechat"
+ 
+req := new(GetWeeklyRetainRequest)
+resp := new(GetWeeklyRetainResponse)
+
+req = &GetWeeklyRetainRequest{
+    AppID:  "xxx",
+    Secret: "xxx",
+}
+
+if err := GetWeeklyRetain(req, resp); err != nil {
+    t.Fatalf("%v", err)
+}
+```
+
   
   
