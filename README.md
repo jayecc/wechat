@@ -116,12 +116,14 @@ import "github.com/jayecc/wechat"
 req := new(GetDailyRetainRequest)
 resp := new(GetDailyRetainResponse)
 
+token := "xxxx"
+
 req = &GetDailyRetainRequest{
-    AppID:  "xxx",
-    Secret: "xxx",
+    BeginDate: "20170313",
+    EndDate:   "20170313",
 }
 
-if err := GetDailyRetain(req, resp); err != nil {
+if err := GetDailyRetain(token, req, resp); err != nil {
     t.Fatalf("%v", err)
 }
 ```
@@ -134,12 +136,14 @@ import "github.com/jayecc/wechat"
 req := new(GetMonthlyRetainRequest)
 resp := new(GetMonthlyRetainResponse)
 
+token := "xxxx"
+
 req = &GetMonthlyRetainRequest{
-    AppID:  "xxx",
-    Secret: "xxx",
+    BeginDate: "20170201",
+    EndDate:   "20170228",
 }
 
-if err := GetMonthlyRetain(req, resp); err != nil {
+if err := GetMonthlyRetain(token, req, resp); err != nil {
     t.Fatalf("%v", err)
 }
 ```
@@ -152,12 +156,14 @@ import "github.com/jayecc/wechat"
 req := new(GetWeeklyRetainRequest)
 resp := new(GetWeeklyRetainResponse)
 
+token := "xxxx"
+
 req = &GetWeeklyRetainRequest{
-    AppID:  "xxx",
-    Secret: "xxx",
+    BeginDate: "20170306",
+    EndDate:   "20170312",
 }
 
-if err := GetWeeklyRetain(req, resp); err != nil {
+if err := GetWeeklyRetain(token, req, resp); err != nil {
     t.Fatalf("%v", err)
 }
 ```
