@@ -10,7 +10,7 @@ go get -u -v github.com/jayecc/wechat
 
 ## 目录
 
-- [登录](#登录)
+- [登陆](#登陆)
   - [code2Session](#code2Session)
 - [用户信息](#用户信息)
   - [getPaidUnionId](#getPaidUnionId) 
@@ -19,7 +19,7 @@ go get -u -v github.com/jayecc/wechat
   
 ---
 
-## 登陆
+### 登陆
 
 #### [code2Session](https://developers.weixin.qq.com/miniprogram/dev/api-backend/open-api/login/auth.code2Session.html)
 
@@ -43,7 +43,7 @@ if err := Code2Session(req, resp); err != nil {
 
 ---
 
-## 用户信息
+### 用户信息
 
 #### [getPaidUnionId](https://developers.weixin.qq.com/miniprogram/dev/api-backend/open-api/user-info/auth.getPaidUnionId.html)
 > 调用时两种方式任选其一
@@ -71,7 +71,7 @@ if err := GetPaidUnionId(req, resp); err != nil {
 
  ---
  
- ## 调用接口凭证
+ ## 接口调用凭证
  
  #### [getAccessToken](https://developers.weixin.qq.com/miniprogram/dev/api-backend/open-api/access-token/auth.getAccessToken.html)
  > 调用时请注意频率，做好妥善缓存
