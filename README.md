@@ -26,7 +26,25 @@ go get -u -v github.com/jayecc/wechat
     - [analysis.getDailyVisitTrend](#analysis.getDailyVisitTrend)
     - [analysis.getMonthlyVisitTrend](#analysis.getMonthlyVisitTrend)
     - [analysis.getWeeklyVisitTrend](#analysis.getWeeklyVisitTrend)
-
+  - [analysis.getUserPortrait](#analysis.getUserPortrait)
+  - [analysis.getVisitDistribution](#analysis.getVisitDistribution)
+  - [analysis.getVisitPage](#analysis.getVisitPage)
+- [客服消息](#客服消息)
+  - [customerServiceMessage.getTempMedia](#customerServiceMessage.getTempMedia)
+  - [customerServiceMessage.send](#customerServiceMessage.send)
+  - [customerServiceMessage.setTyping](#customerServiceMessage.setTyping)
+  - [customerServiceMessage.uploadTempMedia](#customerServiceMessage.uploadTempMedia)
+- [统一消息](#统一消息)
+  - [uniformMessage.send](#uniformMessage.send)
+- [动态消息](#动态消息)
+  - [updatableMessage.createActivityId](#updatableMessage.createActivityId)
+  - [updatableMessage.setUpdatableMsg](#updatableMessage.setUpdatableMsg)
+- [插件管理](#插件管理)
+  - [pluginManager.applyPlugin](#pluginManager.applyPlugin)
+  - [pluginManager.getPluginDevApplyList](#pluginManager.getPluginDevApplyList)
+  - [pluginManager.getPluginList](#pluginManager.getPluginList)
+  - [pluginManager.setDevPluginApplyStatus](#pluginManager.setDevPluginApplyStatus)
+  - [pluginManager.unbindPlugin](#pluginManager.unbindPlugin)
 ---
 
 ## 登陆
