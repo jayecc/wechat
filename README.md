@@ -1,6 +1,14 @@
-## 目录
-
 > [小程序服务端官方文档](https://developers.weixin.qq.com/miniprogram/dev/api-backend/) 
+
+## 安装
+
+```sh
+
+go get -u -v github.com/jayecc/wechat
+
+```
+
+## 目录
 
 - [登录](#登录)
   - [code2Session](#code2Session)
