@@ -11,7 +11,7 @@ go get -u -v github.com/jayecc/wechat
 ## 目录
 
 - [登陆](#登陆)
-  - [auth.code2Session](#auth.code2Session)
+  - [auth.code2Session](#authcode2Session)
 - [用户信息](#用户信息)
   - [auth.getPaidUnionId](#auth.getPaidUnionId) 
 - [接口调用凭证](#接口调用凭证)
@@ -49,7 +49,7 @@ go get -u -v github.com/jayecc/wechat
 
 ## 登陆
 
-#### [auth.code2Session](https://developers.weixin.qq.com/miniprogram/dev/api-backend/open-api/login/auth.code2Session.html)
+#### [authcode2Session](https://developers.weixin.qq.com/miniprogram/dev/api-backend/open-api/login/auth.code2Session.html)
 
 ```go
 import "github.com/jayecc/wechat"
