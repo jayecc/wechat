@@ -49,7 +49,7 @@ go get -u -v github.com/jayecc/wechat
 
 ## 登陆
 
-#### [auth.code2Session](https://developers.weixin.qq.com/miniprogram/dev/api-backend/open-api/login/auth.code2Session.html)
+#### <a id="auth.code2Session" href="https://developers.weixin.qq.com/miniprogram/dev/api-backend/open-api/login/auth.code2Session.html" target="_blank">auth.code2Session</a>
 
 ```go
 import "github.com/jayecc/wechat"
