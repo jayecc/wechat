@@ -23,10 +23,10 @@ func TestCode2Session(t *testing.T) {
 
 func TestGetPaidUnionId(t *testing.T) {
 
-	req := new(GetPaidUnionIdRequest)
-	resp := new(GetPaidUnionIdResponse)
+	req := new(GetPaidUnionIDRequest)
+	resp := new(GetPaidUnionIDResponse)
 
-	req = &GetPaidUnionIdRequest{
+	req = &GetPaidUnionIDRequest{
 		AccessToken:   "xxxx",
 		Openid:        "22",
 		TransactionID: "",
@@ -34,7 +34,7 @@ func TestGetPaidUnionId(t *testing.T) {
 		OutTradeNO:    "",
 	}
 
-	if err := GetPaidUnionId(req, resp); err != nil {
+	if err := GetPaidUnionID(req, resp); err != nil {
 		t.Fatalf("%v", err)
 	}
 

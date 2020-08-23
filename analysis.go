@@ -1,17 +1,18 @@
 package wechat
 
 import (
-	"github.com/pkg/errors"
 	"net/url"
+
+	"github.com/pkg/errors"
 )
 
-// 获取用户访问小程序日留存-请求
+// GetDailyRetainRequest 获取用户访问小程序日留存-请求
 type GetDailyRetainRequest struct {
 	BeginDate string `json:"begin_date"` //开始日期。格式为 yyyymmdd
 	EndDate   string `json:"end_date"`   //结束日期，限定查询1天数据，允许设置的最大值为昨日。格式为 yyyymmdd
 }
 
-// 获取用户访问小程序日留存-响应
+// GetDailyRetainResponse 获取用户访问小程序日留存-响应
 type GetDailyRetainResponse struct {
 	Error
 	RefDate    string                  `json:"ref_date"`     //日期
@@ -19,17 +20,19 @@ type GetDailyRetainResponse struct {
 	VisitUv    []DailyRetainVisitUv    `json:"visit_uv"`     //活跃用户留存
 }
 
+// DailyRetainVisitUvNew 新增用户留存
 type DailyRetainVisitUvNew struct {
 	Key   int `json:"key"`   //标识，0开始，表示当天，1表示1天后。依此类推，key取值分别是：0,1,2,3,4,5,6,7,14,30
 	Value int `json:"value"` //key对应日期的新增用户数/活跃用户数（key=0时）或留存用户数（k>0时）
 }
 
+// DailyRetainVisitUv 活跃用户留存
 type DailyRetainVisitUv struct {
 	Key   int `json:"key"`   //标识，0开始，表示当天，1表示1天后。依此类推，key取值分别是：0,1,2,3,4,5,6,7,14,30
 	Value int `json:"value"` //key对应日期的新增用户数/活跃用户数（key=0时）或留存用户数（k>0时）
 }
 
-// 获取用户访问小程序日留存
+// GetDailyRetain 获取用户访问小程序日留存
 // https://developers.weixin.qq.com/miniprogram/dev/api-backend/open-api/data-analysis/visit-retain/analysis.getDailyRetain.html
 func GetDailyRetain(accessToken string, req *GetDailyRetainRequest, resp *GetDailyRetainResponse) error {
 
@@ -47,7 +50,7 @@ func GetDailyRetain(accessToken string, req *GetDailyRetainRequest, resp *GetDai
 
 	u := "https://api.weixin.qq.com/datacube/getweanalysisappiddailyretaininfo?access_token=" + url.QueryEscape(accessToken)
 
-	if err := httpPostJSON(DefaultHttpClient, u, req, resp); err != nil {
+	if err := httpPostJSON(DefaultHTTPClient, u, req, resp); err != nil {
 		return errors.Wrap(err, "http request error")
 	}
 
@@ -58,13 +61,13 @@ func GetDailyRetain(accessToken string, req *GetDailyRetainRequest, resp *GetDai
 	return nil
 }
 
-// 获取用户访问小程序月留存-请求
+// GetMonthlyRetainRequest 获取用户访问小程序月留存-请求
 type GetMonthlyRetainRequest struct {
 	BeginDate string `json:"begin_date"` //开始日期，为自然月第一天。格式为 yyyymmdd
 	EndDate   string `json:"end_date"`   //结束日期，为自然月最后一天，限定查询一个月数据。格式为 yyyymmdd
 }
 
-// 获取用户访问小程序月留存-响应
+// GetMonthlyRetainResponse 获取用户访问小程序月留存-响应
 type GetMonthlyRetainResponse struct {
 	Error
 	RefDate    string                    `json:"ref_date"`     //时间，如："201702"
@@ -72,17 +75,19 @@ type GetMonthlyRetainResponse struct {
 	VisitUv    []MonthlyRetainVisitUv    `json:"visit_uv"`     //活跃用户留存
 }
 
+// MonthlyRetainVisitUvNew 新增用户留存
 type MonthlyRetainVisitUvNew struct {
 	Key   int `json:"key"`   //标识，0开始，表示当月，1表示1月后。key取值分别是：0,1
 	Value int `json:"value"` //key对应日期的新增用户数/活跃用户数（key=0时）或留存用户数（k>0时）
 }
 
+// MonthlyRetainVisitUv 活跃用户留存
 type MonthlyRetainVisitUv struct {
 	Key   int `json:"key"`   //标识，0开始，表示当月，1表示1月后。key取值分别是：0,1
 	Value int `json:"value"` //key对应日期的新增用户数/活跃用户数（key=0时）或留存用户数（k>0时）
 }
 
-// 获取用户访问小程序月留存
+// GetMonthlyRetain 获取用户访问小程序月留存
 // https://developers.weixin.qq.com/miniprogram/dev/api-backend/open-api/data-analysis/visit-retain/analysis.getMonthlyRetain.html
 func GetMonthlyRetain(accessToken string, req *GetMonthlyRetainRequest, resp *GetMonthlyRetainResponse) error {
 
@@ -100,7 +105,7 @@ func GetMonthlyRetain(accessToken string, req *GetMonthlyRetainRequest, resp *Ge
 
 	u := "https://api.weixin.qq.com/datacube/getweanalysisappidmonthlyretaininfo?access_token=" + url.QueryEscape(accessToken)
 
-	if err := httpPostJSON(DefaultHttpClient, u, req, resp); err != nil {
+	if err := httpPostJSON(DefaultHTTPClient, u, req, resp); err != nil {
 		return errors.Wrap(err, "http request error")
 	}
 
@@ -111,13 +116,13 @@ func GetMonthlyRetain(accessToken string, req *GetMonthlyRetainRequest, resp *Ge
 	return nil
 }
 
-// 获取用户访问小程序周留存-请求
+// GetWeeklyRetainRequest 获取用户访问小程序周留存-请求
 type GetWeeklyRetainRequest struct {
 	BeginDate string `json:"begin_date"` //开始日期，为周一日期。格式为 yyyymmdd
 	EndDate   string `json:"end_date"`   //结束日期，为周日日期，限定查询一周数据。格式为 yyyymmdd
 }
 
-// 获取用户访问小程序周留存-响应
+// GetWeeklyRetainResponse 获取用户访问小程序周留存-响应
 type GetWeeklyRetainResponse struct {
 	Error
 	RefDate    string                   `json:"ref_date"`     //时间，如："20170306-20170312"
@@ -125,17 +130,19 @@ type GetWeeklyRetainResponse struct {
 	VisitUv    []WeeklyRetainVisitUv    `json:"visit_uv"`     //活跃用户留存
 }
 
+// WeeklyRetainVisitUvNew 新增用户留存
 type WeeklyRetainVisitUvNew struct {
 	Key   int `json:"key"`   //标识，0开始，表示当周，1表示1周后。依此类推，取值分别是：0,1,2,3,4
 	Value int `json:"value"` //key对应日期的新增用户数/活跃用户数（key=0时）或留存用户数（k>0时）
 }
 
+// WeeklyRetainVisitUv 活跃用户留存
 type WeeklyRetainVisitUv struct {
 	Key   int `json:"key"`   //标识，0开始，表示当周，1表示1周后。依此类推，取值分别是：0,1,2,3,4
 	Value int `json:"value"` //key对应日期的新增用户数/活跃用户数（key=0时）或留存用户数（k>0时）
 }
 
-// 获取用户访问小程序周留存
+// GetWeeklyRetain 获取用户访问小程序周留存
 // https://developers.weixin.qq.com/miniprogram/dev/api-backend/open-api/data-analysis/visit-retain/analysis.getWeeklyRetain.html
 func GetWeeklyRetain(accessToken string, req *GetWeeklyRetainRequest, resp *GetWeeklyRetainResponse) error {
 
@@ -153,7 +160,7 @@ func GetWeeklyRetain(accessToken string, req *GetWeeklyRetainRequest, resp *GetW
 
 	u := "https://api.weixin.qq.com/datacube/getweanalysisappidweeklyretaininfo?access_token=" + url.QueryEscape(accessToken)
 
-	if err := httpPostJSON(DefaultHttpClient, u, req, resp); err != nil {
+	if err := httpPostJSON(DefaultHTTPClient, u, req, resp); err != nil {
 		return errors.Wrap(err, "http request error")
 	}
 

@@ -5,9 +5,11 @@ import (
 )
 
 const (
-	ErrCodeOK = 0 // 请求成功
+	// ErrCodeOK 请求成功
+	ErrCodeOK = 0
 )
 
+// Error 通用错误
 type Error struct {
 	ErrCode int64  `json:"errcode"`
 	ErrMsg  string `json:"errmsg"`

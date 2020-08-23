@@ -4,7 +4,6 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
-	"github.com/pkg/errors"
 	"io"
 	"mime/multipart"
 	"net/http"
@@ -12,14 +11,17 @@ import (
 	"reflect"
 	"strconv"
 	"time"
+
+	"github.com/pkg/errors"
 )
 
-var DefaultHttpClient *http.Client
+// DefaultHTTPClient 默认http客户端
+var DefaultHTTPClient *http.Client
 
 func init() {
 	client := &http.Client{}
 	client.Timeout = time.Second * 5
-	DefaultHttpClient = client
+	DefaultHTTPClient = client
 }
 
 // encodeURL 编码url
@@ -58,14 +60,14 @@ func struct2Map(in interface{}, out map[string]string) error {
 }
 
 // httpGetJSON http get request
-func httpGetJSON(clt *http.Client, baseUrl string, request interface{}, response interface{}) error {
+func httpGetJSON(clt *http.Client, URL string, request interface{}, response interface{}) error {
 
 	params := make(map[string]string)
 	if err := struct2Map(request, params); err != nil {
 		return errors.Wrap(err, "params error")
 	}
 
-	u, err := encodeURL(baseUrl, params)
+	u, err := encodeURL(URL, params)
 	if err != nil {
 		return errors.Wrap(err, "url encode error")
 	}
@@ -83,7 +85,7 @@ func httpGetJSON(clt *http.Client, baseUrl string, request interface{}, response
 }
 
 // httpPostJSON http post request
-func httpPostJSON(clt *http.Client, u string, request interface{}, response interface{}) error {
+func httpPostJSON(clt *http.Client, URL string, request interface{}, response interface{}) error {
 
 	buffer := textBufferPool.Get().(*bytes.Buffer)
 	buffer.Reset()
@@ -95,7 +97,7 @@ func httpPostJSON(clt *http.Client, u string, request interface{}, response inte
 		return err
 	}
 
-	httpResp, err := clt.Post(u, "application/json; charset=utf-8", buffer)
+	httpResp, err := clt.Post(URL, "application/json; charset=utf-8", buffer)
 	if err != nil {
 		return err
 	}
@@ -107,6 +109,7 @@ func httpPostJSON(clt *http.Client, u string, request interface{}, response inte
 	return decodeJSONHttpResponse(httpResp.Body, response)
 }
 
+// MultipartFormField 文件
 type MultipartFormField struct {
 	IsFile   bool
 	Name     string
@@ -115,7 +118,7 @@ type MultipartFormField struct {
 }
 
 // httpPostMultipartForm http post request
-func httpPostMultipartForm(clt *http.Client, u string, fields []MultipartFormField, response interface{}) error {
+func httpPostMultipartForm(clt *http.Client, URL string, fields []MultipartFormField, response interface{}) error {
 
 	buffer := mediaBufferPool.Get().(*bytes.Buffer)
 	buffer.Reset()
@@ -145,7 +148,7 @@ func httpPostMultipartForm(clt *http.Client, u string, fields []MultipartFormFie
 		return err
 	}
 
-	httpResp, err := clt.Post(u, multipartWriter.FormDataContentType(), buffer)
+	httpResp, err := clt.Post(URL, multipartWriter.FormDataContentType(), buffer)
 	if err != nil {
 		return err
 	}
