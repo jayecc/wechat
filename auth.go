@@ -1,6 +1,7 @@
 package wechat
 
 import (
+	validation "github.com/go-ozzo/ozzo-validation/v4"
 	"github.com/pkg/errors"
 )
 
@@ -36,21 +37,17 @@ func Code2Session(req *Code2SessionRequest, resp *Code2SessionResponse) error {
 
 	req.GrantType = GrantTypeAuthorizationCode
 
-	if req.AppID == "" {
-		return errors.Wrap(errors.New("app id is empty"), "request param error")
+	if err := validation.ValidateStruct(req,
+		validation.Field(&req.AppID, validation.Required),
+		validation.Field(&req.Secret, validation.Required),
+		validation.Field(&req.JsCode, validation.Required),
+	); err != nil {
+		return errors.Wrap(err, "request param error")
 	}
 
-	if req.Secret == "" {
-		return errors.Wrap(errors.New("app secret is empty"), "request param error")
-	}
+	URL := "https://api.weixin.qq.com/sns/jscode2session"
 
-	if req.JsCode == "" {
-		return errors.Wrap(errors.New("js code is empty"), "request param error")
-	}
-
-	url := "https://api.weixin.qq.com/sns/jscode2session"
-
-	if err := httpGetJSON(DefaultHTTPClient, url, req, resp); err != nil {
+	if err := httpGetJSON(DefaultHTTPClient, URL, req, resp); err != nil {
 		return errors.Wrap(err, "http request error")
 	}
 
@@ -80,17 +77,16 @@ type GetPaidUnionIDResponse struct {
 // https://developers.weixin.qq.com/miniprogram/dev/api-backend/open-api/user-info/auth.getPaidUnionId.html
 func GetPaidUnionID(req *GetPaidUnionIDRequest, resp *GetPaidUnionIDResponse) error {
 
-	if req.AccessToken == "" {
-		return errors.Wrap(errors.New("access token is empty"), "request param error")
+	if err := validation.ValidateStruct(req,
+		validation.Field(&req.AccessToken, validation.Required),
+		validation.Field(&req.Openid, validation.Required),
+	); err != nil {
+		return errors.Wrap(err, "request param error")
 	}
 
-	if req.Openid == "" {
-		return errors.Wrap(errors.New("open id is empty"), "request param error")
-	}
+	URL := "https://api.weixin.qq.com/wxa/getpaidunionid"
 
-	url := "https://api.weixin.qq.com/wxa/getpaidunionid"
-
-	if err := httpGetJSON(DefaultHTTPClient, url, req, resp); err != nil {
+	if err := httpGetJSON(DefaultHTTPClient, URL, req, resp); err != nil {
 		return errors.Wrap(err, "http request error")
 	}
 
@@ -121,17 +117,16 @@ func GetAccessToken(req *GetAccessTokenRequest, resp *GetAccessTokenResponse) er
 
 	req.GrantType = GrantTypeClientCredential
 
-	if req.AppID == "" {
-		return errors.Wrap(errors.New("app id is empty"), "request param error")
+	if err := validation.ValidateStruct(req,
+		validation.Field(&req.AppID, validation.Required),
+		validation.Field(&req.Secret, validation.Required),
+	); err != nil {
+		return errors.Wrap(err, "request param error")
 	}
 
-	if req.Secret == "" {
-		return errors.Wrap(errors.New("secret is empty"), "request param error")
-	}
+	URL := "https://api.weixin.qq.com/cgi-bin/token"
 
-	url := "https://api.weixin.qq.com/cgi-bin/token"
-
-	if err := httpGetJSON(DefaultHTTPClient, url, req, resp); err != nil {
+	if err := httpGetJSON(DefaultHTTPClient, URL, req, resp); err != nil {
 		return errors.Wrap(err, "http request error")
 	}
 

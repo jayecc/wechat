@@ -3,6 +3,7 @@ package wechat
 import (
 	"net/url"
 
+	validation "github.com/go-ozzo/ozzo-validation/v4"
 	"github.com/pkg/errors"
 )
 
@@ -36,21 +37,20 @@ type DailyRetainVisitUv struct {
 // https://developers.weixin.qq.com/miniprogram/dev/api-backend/open-api/data-analysis/visit-retain/analysis.getDailyRetain.html
 func GetDailyRetain(accessToken string, req *GetDailyRetainRequest, resp *GetDailyRetainResponse) error {
 
-	if accessToken == "" {
-		return errors.Wrap(errors.New("access token is empty"), "request param error")
+	if err := validation.Validate(accessToken, validation.Required); err != nil {
+		return errors.Wrap(err, "request param error")
 	}
 
-	if req.BeginDate == "" {
-		return errors.Wrap(errors.New("begin date is empty"), "request param error")
+	if err := validation.ValidateStruct(req,
+		validation.Field(&req.BeginDate, validation.Required),
+		validation.Field(&req.EndDate, validation.Required),
+	); err != nil {
+		return errors.Wrap(err, "request param error")
 	}
 
-	if req.EndDate == "" {
-		return errors.Wrap(errors.New("end date is empty"), "request param error")
-	}
+	URL := "https://api.weixin.qq.com/datacube/getweanalysisappiddailyretaininfo?access_token=" + url.QueryEscape(accessToken)
 
-	u := "https://api.weixin.qq.com/datacube/getweanalysisappiddailyretaininfo?access_token=" + url.QueryEscape(accessToken)
-
-	if err := httpPostJSON(DefaultHTTPClient, u, req, resp); err != nil {
+	if err := httpPostJSON(DefaultHTTPClient, URL, req, resp); err != nil {
 		return errors.Wrap(err, "http request error")
 	}
 
@@ -91,21 +91,20 @@ type MonthlyRetainVisitUv struct {
 // https://developers.weixin.qq.com/miniprogram/dev/api-backend/open-api/data-analysis/visit-retain/analysis.getMonthlyRetain.html
 func GetMonthlyRetain(accessToken string, req *GetMonthlyRetainRequest, resp *GetMonthlyRetainResponse) error {
 
-	if accessToken == "" {
-		return errors.Wrap(errors.New("access token is empty"), "request param error")
+	if err := validation.Validate(accessToken, validation.Required); err != nil {
+		return errors.Wrap(err, "request param error")
 	}
 
-	if req.BeginDate == "" {
-		return errors.Wrap(errors.New("begin date is empty"), "request param error")
+	if err := validation.ValidateStruct(req,
+		validation.Field(&req.BeginDate, validation.Required),
+		validation.Field(&req.EndDate, validation.Required),
+	); err != nil {
+		return errors.Wrap(err, "request param error")
 	}
 
-	if req.EndDate == "" {
-		return errors.Wrap(errors.New("end date is empty"), "request param error")
-	}
+	URL := "https://api.weixin.qq.com/datacube/getweanalysisappidmonthlyretaininfo?access_token=" + url.QueryEscape(accessToken)
 
-	u := "https://api.weixin.qq.com/datacube/getweanalysisappidmonthlyretaininfo?access_token=" + url.QueryEscape(accessToken)
-
-	if err := httpPostJSON(DefaultHTTPClient, u, req, resp); err != nil {
+	if err := httpPostJSON(DefaultHTTPClient, URL, req, resp); err != nil {
 		return errors.Wrap(err, "http request error")
 	}
 
@@ -146,21 +145,119 @@ type WeeklyRetainVisitUv struct {
 // https://developers.weixin.qq.com/miniprogram/dev/api-backend/open-api/data-analysis/visit-retain/analysis.getWeeklyRetain.html
 func GetWeeklyRetain(accessToken string, req *GetWeeklyRetainRequest, resp *GetWeeklyRetainResponse) error {
 
-	if accessToken == "" {
-		return errors.Wrap(errors.New("access token is empty"), "request param error")
+	if err := validation.Validate(accessToken, validation.Required); err != nil {
+		return errors.Wrap(err, "request param error")
 	}
 
-	if req.BeginDate == "" {
-		return errors.Wrap(errors.New("begin date is empty"), "request param error")
+	if err := validation.ValidateStruct(req,
+		validation.Field(&req.BeginDate, validation.Required),
+		validation.Field(&req.EndDate, validation.Required),
+	); err != nil {
+		return errors.Wrap(err, "request param error")
 	}
 
-	if req.EndDate == "" {
-		return errors.Wrap(errors.New("end date is empty"), "request param error")
+	URL := "https://api.weixin.qq.com/datacube/getweanalysisappidweeklyretaininfo?access_token=" + url.QueryEscape(accessToken)
+
+	if err := httpPostJSON(DefaultHTTPClient, URL, req, resp); err != nil {
+		return errors.Wrap(err, "http request error")
 	}
 
-	u := "https://api.weixin.qq.com/datacube/getweanalysisappidweeklyretaininfo?access_token=" + url.QueryEscape(accessToken)
+	if resp.ErrCode != ErrCodeOK {
+		return errors.Wrap(errors.New(resp.Error.Error()), "http response error")
+	}
 
-	if err := httpPostJSON(DefaultHTTPClient, u, req, resp); err != nil {
+	return nil
+}
+
+// GetDailySummaryRequest 获取用户访问小程序数据概况-请求
+type GetDailySummaryRequest struct {
+	BeginDate string `json:"begin_date"` //开始日期。格式为 yyyymmdd
+	EndDate   string `json:"end_date"`   //结束日期，限定查询1天数据，允许设置的最大值为昨日。格式为 yyyymmdd
+}
+
+// GetDailySummaryResponse 获取用户访问小程序数据概况-响应
+type GetDailySummaryResponse struct {
+	Error
+	List []DailySummary `json:"list"`
+}
+
+// DailySummary 访问数据
+type DailySummary struct {
+	RefDate    string `json:"ref_date"`    //日期，格式为 yyyymmdd
+	VisitTotal int    `json:"visit_total"` //累计用户数
+	SharePV    int    `json:"share_pv"`    //转发次数
+	ShareUV    int    `json:"share_uv"`    //转发人数
+}
+
+// GetDailySummary 获取用户访问小程序数据概况
+// https://developers.weixin.qq.com/miniprogram/dev/api-backend/open-api/data-analysis/analysis.getDailySummary.html
+func GetDailySummary(accessToken string, req *GetDailySummaryRequest, resp *GetDailySummaryResponse) error {
+
+	if err := validation.Validate(accessToken, validation.Required); err != nil {
+		return errors.Wrap(err, "request param error")
+	}
+
+	if err := validation.ValidateStruct(req,
+		validation.Field(&req.BeginDate, validation.Required),
+		validation.Field(&req.EndDate, validation.Required),
+	); err != nil {
+		return errors.Wrap(err, "request param error")
+	}
+
+	URL := "https://api.weixin.qq.com/datacube/getweanalysisappiddailysummarytrend?access_token=" + url.QueryEscape(accessToken)
+
+	if err := httpPostJSON(DefaultHTTPClient, URL, req, resp); err != nil {
+		return errors.Wrap(err, "http request error")
+	}
+
+	if resp.ErrCode != ErrCodeOK {
+		return errors.Wrap(errors.New(resp.Error.Error()), "http response error")
+	}
+
+	return nil
+}
+
+// GetDailyVisitTrendRequest 获取用户访问小程序数据日趋势-请求
+type GetDailyVisitTrendRequest struct {
+	BeginDate string `json:"begin_date"` //开始日期。格式为 yyyymmdd
+	EndDate   string `json:"end_date"`   //结束日期，限定查询1天数据，允许设置的最大值为昨日。格式为 yyyymmdd
+}
+
+// GetDailyVisitTrendResponse 获取用户访问小程序数据日趋势-响应
+type GetDailyVisitTrendResponse struct {
+	Error
+	List []DailyVisitTrend `json:"list"` //数据列表
+}
+
+// DailyVisitTrend 用户访问小程序数据日趋势
+type DailyVisitTrend struct {
+	RefDate         string `json:"ref_date"`          //日期，格式为 yyyymmdd
+	SessionCnt      int    `json:"session_cnt"`       //打开次数
+	VisitPV         int    `json:"visit_pv"`          //访问次数
+	VisitUV         int    `json:"visit_uv"`          //访问人数
+	VisitUvNew      int    `json:"visit_uv_new"`      //新用户数
+	StayTimeUV      int    `json:"stay_time_uv"`      //人均停留时长 (浮点型，单位：秒)
+	StayTimeSession int    `json:"stay_time_session"` //次均停留时长 (浮点型，单位：秒)
+	VisitDepth      int    `json:"visit_depth"`       //平均访问深度 (浮点型)
+}
+
+// GetDailyVisitTrend 获取用户访问小程序数据日趋势
+func GetDailyVisitTrend(accessToken string, req *GetDailyVisitTrendRequest, resp *GetDailyVisitTrendResponse) error {
+
+	if err := validation.Validate(accessToken, validation.Required); err != nil {
+		return errors.Wrap(err, "request param error")
+	}
+
+	if err := validation.ValidateStruct(req,
+		validation.Field(&req.BeginDate, validation.Required),
+		validation.Field(&req.EndDate, validation.Required),
+	); err != nil {
+		return errors.Wrap(err, "request param error")
+	}
+
+	URL := "https://api.weixin.qq.com/datacube/getweanalysisappiddailyvisittrend?access_token=" + url.QueryEscape(accessToken)
+
+	if err := httpPostJSON(DefaultHTTPClient, URL, req, resp); err != nil {
 		return errors.Wrap(err, "http request error")
 	}
 
