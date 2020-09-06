@@ -11,7 +11,7 @@ const (
 
 // Error 通用错误
 type Error struct {
-	ErrCode int64  `json:"errcode"`
+	ErrCode int  `json:"errcode"`
 	ErrMsg  string `json:"errmsg"`
 }
 

@@ -18,6 +18,9 @@ import (
 // DefaultHTTPClient 默认http客户端
 var DefaultHTTPClient *http.Client
 
+// queryParams map
+type queryParams map[string]string
+
 func init() {
 	client := &http.Client{}
 	client.Timeout = time.Second * 5
@@ -25,7 +28,7 @@ func init() {
 }
 
 // encodeURL 编码url
-func encodeURL(baseURL string, params map[string]string) (string, error) {
+func encodeURL(baseURL string, params queryParams) (string, error) {
 
 	parse, err := url.Parse(baseURL)
 	if err != nil {
@@ -81,7 +84,7 @@ func httpGetJSON(clt *http.Client, URL string, request interface{}, response int
 	if httpResp.StatusCode != http.StatusOK {
 		return fmt.Errorf("http.Status: %s", httpResp.Status)
 	}
-	return decodeJSONHttpResponse(httpResp.Body, response)
+	return decodeJSONResponse(httpResp.Body, response)
 }
 
 // httpPostJSON http post request
@@ -106,7 +109,7 @@ func httpPostJSON(clt *http.Client, URL string, request interface{}, response in
 	if httpResp.StatusCode != http.StatusOK {
 		return fmt.Errorf("http.Status: %s", httpResp.Status)
 	}
-	return decodeJSONHttpResponse(httpResp.Body, response)
+	return decodeJSONResponse(httpResp.Body, response)
 }
 
 // MultipartFormField 文件
@@ -157,10 +160,26 @@ func httpPostMultipartForm(clt *http.Client, URL string, fields []MultipartFormF
 	if httpResp.StatusCode != http.StatusOK {
 		return fmt.Errorf("http.Status: %s", httpResp.Status)
 	}
-	return decodeJSONHttpResponse(httpResp.Body, response)
+	return decodeJSONResponse(httpResp.Body, response)
 }
 
 // decodeJSONHttpResponse http json response decode
 func decodeJSONHttpResponse(r io.Reader, v interface{}) error {
 	return json.NewDecoder(r).Decode(v)
+}
+
+// decodeJSONResponse 响应状态码判断
+func decodeJSONResponse(r io.Reader, response interface{}) error {
+
+	var errCode Error
+
+	if err := decodeJSONHttpResponse(r, &errCode); err != nil {
+		return err
+	}
+
+	if errCode.ErrCode != ErrCodeOK {
+		return errors.Wrap(errors.New(errCode.Error()), "http response code error")
+	}
+
+	return decodeJSONHttpResponse(r, response)
 }

@@ -25,7 +25,6 @@ type Code2SessionRequest struct {
 
 // Code2SessionResponse 登录凭证校验-响应
 type Code2SessionResponse struct {
-	Error
 	OpenID     string `json:"open_id"`     //用户唯一标识
 	SessionKey string `json:"session_key"` //会话密钥
 	UnionID    string `json:"unionid"`     //用户在开放平台的唯一标识符，在满足 UnionID 下发条件的情况下会返回，详见 UnionID 机制说明。
@@ -47,15 +46,7 @@ func Code2Session(req *Code2SessionRequest, resp *Code2SessionResponse) error {
 
 	URL := "https://api.weixin.qq.com/sns/jscode2session"
 
-	if err := httpGetJSON(DefaultHTTPClient, URL, req, resp); err != nil {
-		return errors.Wrap(err, "http request error")
-	}
-
-	if resp.ErrCode != ErrCodeOK {
-		return errors.Wrap(errors.New(resp.Error.Error()), "http response error")
-	}
-
-	return nil
+	return httpGetJSON(DefaultHTTPClient, URL, req, resp)
 }
 
 // GetPaidUnionIDRequest 获取UnionID-请求
@@ -69,7 +60,6 @@ type GetPaidUnionIDRequest struct {
 
 // GetPaidUnionIDResponse 获取UnionID-响应
 type GetPaidUnionIDResponse struct {
-	Error
 	UnionID string `json:"unionid"` //用户唯一标识，调用成功后返回
 }
 
@@ -86,15 +76,7 @@ func GetPaidUnionID(req *GetPaidUnionIDRequest, resp *GetPaidUnionIDResponse) er
 
 	URL := "https://api.weixin.qq.com/wxa/getpaidunionid"
 
-	if err := httpGetJSON(DefaultHTTPClient, URL, req, resp); err != nil {
-		return errors.Wrap(err, "http request error")
-	}
-
-	if resp.ErrCode != ErrCodeOK {
-		return errors.Wrap(errors.New(resp.Error.Error()), "http response error")
-	}
-
-	return nil
+	return httpGetJSON(DefaultHTTPClient, URL, req, resp)
 }
 
 // GetAccessTokenRequest 获取凭证-请求
@@ -106,7 +88,6 @@ type GetAccessTokenRequest struct {
 
 // GetAccessTokenResponse 获取凭证-响应
 type GetAccessTokenResponse struct {
-	Error
 	AccessToken string `json:"access_token"`
 	ExpiresIn   int    `json:"expires_in"`
 }
@@ -126,13 +107,5 @@ func GetAccessToken(req *GetAccessTokenRequest, resp *GetAccessTokenResponse) er
 
 	URL := "https://api.weixin.qq.com/cgi-bin/token"
 
-	if err := httpGetJSON(DefaultHTTPClient, URL, req, resp); err != nil {
-		return errors.Wrap(err, "http request error")
-	}
-
-	if resp.ErrCode != ErrCodeOK {
-		return errors.Wrap(errors.New(resp.Error.Error()), "http response error")
-	}
-
-	return nil
+	return httpGetJSON(DefaultHTTPClient, URL, req, resp)
 }
