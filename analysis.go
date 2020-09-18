@@ -59,15 +59,15 @@ func DatacubeURL(a aims) string {
 }
 
 // GetDatacube 数据分析
-func GetDatacube(aims aims, accessToken string, req *GetDatacubeRequest, resp interface{}) error {
+func GetDatacube(aims aims, accessToken string, request *GetDatacubeRequest, response interface{}) error {
 
 	if err := validation.Validate(accessToken, validation.Empty); err != nil {
 		return errors.Wrap(err, "request param error")
 	}
 
-	if err := validation.ValidateStruct(req,
-		validation.Field(&req.BeginDate, validation.Required),
-		validation.Field(&req.EndDate, validation.Required, validation.Min(req.BeginDate)),
+	if err := validation.ValidateStruct(request,
+		validation.Field(&request.BeginDate, validation.Required),
+		validation.Field(&request.EndDate, validation.Required, validation.Min(request.BeginDate)),
 	); err != nil {
 		return errors.Wrap(err, "request param error")
 	}
@@ -77,7 +77,7 @@ func GetDatacube(aims aims, accessToken string, req *GetDatacubeRequest, resp in
 		return errors.Wrap(err, "encode url error")
 	}
 
-	if err = httpPostJSON(DefaultHTTPClient, URL, req, resp); err != nil {
+	if err = httpPostJSON(DefaultHTTPClient, URL, request, response); err != nil {
 		return errors.Wrap(err, "http request error")
 	}
 
